@@ -1,3 +1,6 @@
 (defun mix (X Y)
-  
+    (cond ((and (NULL X) (NULL Y)) NIL)
+    )
+          ()
+    ) 
 )
