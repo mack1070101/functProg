@@ -1,6 +1,6 @@
 (defun mix (X Y)
     (cond ((and (NULL X) (NULL Y)) NIL)
+          ((NULL X)  (MIX Y X))
+          (t (cons (car X) (mix Y (cdr X))))
     )
-          ()
-    ) 
 )
