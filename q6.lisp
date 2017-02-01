@@ -25,6 +25,7 @@
     )
 )
 
+; Want to create a binary tree with your recursion
 
 ;first bc checks for equality between 1st element of 1st element of sorted listkkkkk
 ; check if sum of list is < L = null
