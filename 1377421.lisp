@@ -9,6 +9,7 @@
           ((xmember (cdr X) Y) T)  ; Else recurse deeper
     )
 )
+
 ;Question 2
 ; Documentation: Flatten first checks to see if a list is null. If it is, NIL is returned.
 ; Else, the function checks to see if the first element of X is an atom. If it is, the
@@ -21,6 +22,7 @@
           (t (append (flatten (car X)) (flatten (cdr X)))) ; Create a list from the first element and the flattening of the rest of X
     )
 )
+
 ;Question 3
 ; Documentation: If both X and Y are null, return NIL. Else, cons a list from the first element of Y
 ; and the result of mix being called on the rest of Y, when it's position is interchanged with X.
@@ -35,7 +37,7 @@
 ;Question 4
 ; Documentation: If the list is null, return two nils. Else if L is a single item list, return it a nested list
 ; for assembly into larger lists at a higher level. Else make a list containing two lists, that are created by
-; con of the first item of L and the third item of split L, and a cons of the second item of L and the 4th item 
+; con of the first item of L and the third item of split L, and a cons of the second item of L and the 4th item
 ; of split L
 (defun split (L)
     (cond ((NULL L) '(() ())) ; If L is null, return two null lists
@@ -47,7 +49,7 @@
 
 ;Question 5
 ; * 5.1
-; It is not always true that (split (mix L2 L1)) returns the list (L1 L2). By counter example, if the pairs lists are of uneven length, the functions will not return (L1 L2). 
+; It is not always true that (split (mix L2 L1)) returns the list (L1 L2). By counter example, if the pairs lists are of uneven length, the functions will not return (L1 L2).
 ;    Ex:
 ;    (split (mix '(A) '(B C D E F))) → ((B C E) (A D F))
 ;* 5.2
