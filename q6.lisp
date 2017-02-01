@@ -1,13 +1,34 @@
-(defun pruneList (S L)
-    (cond ((NULL L) L)  ; If empty return the empty list
-          ((and (NULL (cdr L)) (< (car L) S)) (list (car L))) ; If it is a single iteme list, and the item is less than S, return it
-          ((< (car L) S) (append (list (car L)) (pruneList S (cdr L)))) ; Build a list of items that are less than sum 
+(defun sumList (x)
+    (cond ((NULL x) 0)
+          (t (+ (car x) (sumList (cdr x))))
+    )
+)
+(defun lastx (x)
+    (cond ((NULL (cdr X)) (car x))
+          (t (last (cdr x)))
+    )
+)
+
+(defun listwithoutlast (x)
+    (cond ((NULL (cdr x)) nil)
+          (t(append (list (car x)) (listwithoutlast (cdr x))))
     )
 )
 
 (defun subsetsum (S L)
-    (cond ((= s 0) L) ; If s = 0, return the list
-          ((AND (NULL L) (not (= S 0))) nil) ; If the list is empty, and sum != 0, return nil
-          (t ((subsetsum)))
+  ; should be sorting, and summing check for correctness
+    (cond ((OR (< S 0) (NULL L)) NIL)
+          ((> (car(sort (copy-list L) '<)) S) NIL);List cannot contain the subset because smallest > S
+          ((< (sumlist L) S) NIL) ; List cannot sum to correct value because it's too small
+          ((= S (car L)) (list (car L)))
+          (t (append (subsetsum S (cdr L)) (subsetsum (- S (car L)) (cdr L))))
     )
 )
+
+
+;first bc checks for equality between 1st element of 1st element of sorted listkkkkk
+; check if sum of list is < L = null
+; Check if sorted list has 1st element > sum = null
+
+
+((> (CAR (SORT '(1 48 18 21) '<)) 4))
