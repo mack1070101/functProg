@@ -13,7 +13,7 @@
     )
     )
 )
-
+;add some lines 
 (defun subsetsum (S L)
   ; should be sorting, and summing check for correctness
     (cond ((OR (< S 0) (NULL L)) NIL)
