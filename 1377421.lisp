@@ -1,3 +1,77 @@
+#|
+(defun locate (X L M)
+
+)
+
+(defun assoc (X N V)
+
+)
+
+(defun eval
+
+)
+
+|#
+(defun getNamesIterator (arg)
+  (cond
+    ((NULL arg) nil)
+    ((atom arg) arg)
+    ((eq (car arg) '=) nil)
+    (t (cons (car arg) (getNamesIterator (cdr arg))))
+  )
+)
+
+(defun getNames (P)
+  (let ((arg (cdar P)))
+    (getNamesIterator arg)
+  )
+)
+
+(defun getBodyIterator (arg)
+  (cond
+    ((NULL arg) nil)
+    ((eq (car arg) '=) (cdr arg))
+    (t  (getBodyIterator (cdr arg)))
+  )
+)
+(defun getBody (P)
+  (let ((arg (cdar P)))
+    (car (getBodyIterator arg))
+  )
+)
+
+(defun getValues (E)
+    (cadr E)
+)
+
+(defun matchValueHelper (X N V)
+  (cond
+    ((NULL X) nil)
+    ((NULL (car N)) nil)
+    ((eq X (car N)) (list (car V))) ;If X is equal to the first element of N, return the corresponding V
+    (t (matchValueHelper X (cdr N) (cdr V)))
+  )
+)
+
+(defun matchValue (X N V)
+  (let ((R (matchValueHelper X N V)))
+    (if R
+      (list R)
+      (list X)
+    )
+  )
+)
+
+(defun buildExpr (B N V expr)
+  ;Performs a search and replace of a body to make it evaluateable
+  (cond
+    ((NULL (car B)) nil)
+    ((NULL (cdr B)) (append expr (matchValue (car B) N V)))
+    ((not (atom (car B))) (buildExpr (car B) N V expr))
+    (t (buildExpr (cdr B) N V (append  (matchValue (car B) N V) expr)))
+    )
+)
+
 (defun fl-interp (E P)
   (cond
     ((atom E) E)
@@ -5,7 +79,6 @@
       (let ( (f (car E))  (arg (cdr E)) )
         (cond
           ; handle built-in functions
-          ((eq f 'args) (car arg))
           ((eq f 'if) (if (fl-interp (car arg) P) (fl-interp (cadr arg) P) (fl-interp (caddr arg) P)))
           ((eq f 'null) (NULL (car arg)))
           ((eq f 'atom) (ATOM (car arg)))
@@ -24,8 +97,15 @@
           ((eq f 'and) (and (fl-interp (car arg) P) (fl-interp (cadr arg) P)))
           ((eq f 'or) (or (fl-interp (car arg) P) (fl-interp (cadr arg) P)))
           ((eq f 'not) (not (fl-interp (car arg) P)))
+          ; Handle user defined functions
+          ((atom f)
+           (let ((N (getNames P)) (V (getValues E)))
+            (buildExpr (getBody P) N V nil)
+           )
+          )
           (t  E)
-          ))
+          )
+        )
       )
     )
   )
