@@ -41,14 +41,14 @@
 )
 
 (defun getValues (E)
-    (cadr E)
+ (cdr E) 
 )
 
 (defun matchValueHelper (X N V)
   (cond
     ((NULL X) nil)
-    ((NULL (car N)) nil)
-    ((eq X (car N)) (list (car V))) ;If X is equal to the first element of N, return the corresponding V
+    ((NULL N) nil)
+    ((eq X (car N)) (car V)) ;If X is equal to the first element of N, return the corresponding V
     (t (matchValueHelper X (cdr N) (cdr V)))
   )
 )
@@ -56,8 +56,8 @@
 (defun matchValue (X N V)
   (let ((R (matchValueHelper X N V)))
     (if R
-      (list R)
-      (list X)
+       R
+       X
     )
   )
 )
@@ -66,9 +66,9 @@
   ;Performs a search and replace of a body to make it evaluateable
   (cond
     ((NULL (car B)) nil)
-    ((NULL (cdr B)) (append expr (matchValue (car B) N V)))
-    ((not (atom (car B))) (buildExpr (car B) N V expr))
-    (t (buildExpr (cdr B) N V (append  (matchValue (car B) N V) expr)))
+    ((NULL (cdr B)) (append expr (list (matchValue (car B) N V))))
+    ((NOT (ATOM (car B))) (append expr (list (buildExpr (car B) N V nil )) (buildExpr (cdr B) N V nil)))
+    (t (buildExpr (cdr B) N V (append expr (list (matchValue (car B) N V)))))
     )
 )
 
@@ -100,7 +100,7 @@
           ; Handle user defined functions
           ((atom f)
            (let ((N (getNames P)) (V (getValues E)))
-            (buildExpr (getBody P) N V nil)
+             (fl-interp (buildExpr (getBody P) N V nil) P)
            )
           )
           (t  E)
