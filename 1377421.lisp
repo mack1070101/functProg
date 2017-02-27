@@ -48,15 +48,22 @@
   (cond
     ((NULL X) nil)
     ((NULL N) nil)
-    ((eq X (car N)) (car V)) ;If X is equal to the first element of N, return the corresponding V
+    ((eq X (car N)) t) ;If X is equal to the first element of N, return the corresponding V
     (t (matchValueHelper X (cdr N) (cdr V)))
   )
 )
 
+(defun locate (X N V)
+  (cond 
+    ((eq X (car N)) (car V)) ;If X is equal to the first element of N, return the corresponding V
+    (t (locate X (cdr N) (cdr V)))
+  )
+ 
+)
 (defun matchValue (X N V)
   (let ((R (matchValueHelper X N V)))
     (if R
-       R
+      (locate X N V) 
        X
     )
   )
@@ -66,7 +73,7 @@
   ;Performs a search and replace of a body to make it evaluateable
   (cond
     ((NULL (car B)) nil)
-    ((NULL (cdr B)) (append expr (list (matchValue (car B) N V))))
+    ((ATOM (car B)) (append expr (list (matchValue (car B) N V)) (buildExpr (cdr B) N V nil)))
     ((NOT (ATOM (car B))) (append expr (list (buildExpr (car B) N V nil )) (buildExpr (cdr B) N V nil)))
     (t (buildExpr (cdr B) N V (append expr (list (matchValue (car B) N V)))))
     )
