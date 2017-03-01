@@ -75,7 +75,7 @@
           ((eq f 'if) 
            (if (flInterpHelper (car arg) P B N Fn) (flInterpHelper (cadr arg) P B N Fn) (flInterpHelper (caddr arg) P B N Fn)))
           ((eq f 'null) (NULL (flInterpHelper (car arg) P B N Fn)))
-          ((eq f 'atom) (ATOM (car arg)))
+          ((eq f 'atom) (ATOM (flInterpHelper (car arg) P B N Fn)))
           ((eq f 'eq) (eq (flInterpHelper (car arg) P B N Fn) (flInterpHelper (cadr arg) P B N Fn)))
           ((eq f 'first)  (car (flInterpHelper (car arg) P B N Fn)))
           ((eq f 'rest) (cdr (flInterpHelper (car arg) P B N Fn)))
@@ -91,10 +91,7 @@
           ((eq f 'and) (and (flInterpHelper (car arg) P B N Fn) (flInterpHelper (cadr arg) P B N Fn)))
           ((eq f 'or) (or (flInterpHelper (car arg) P B N Fn) (flInterpHelper (cadr arg) P B N Fn)))
           ((eq f 'not) (not (flInterpHelper (car arg) P B N Fn)))
-          ((eq f fn) (flInterpHelper (buildExpr B N V nil) P B N Fn))
-          ; Handle user defined functions
-            ;something like ((lambda (vals) ((flInterpHelper (buildExpr B N vals nil) P))) findvalssomehow)
-            ;
+          ((eq f fn) (flInterpHelper (buildExpr B N V nil) P B N Fn)) ; Handle user defined functions
           (t  E)
           )
         )
