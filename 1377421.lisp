@@ -1,17 +1,3 @@
-#|
-(defun locate (X L M)
-
-)
-
-(defun assoc (X N V)
-
-)
-
-(defun eval
-
-)
-
-|#
 (defun getNamesIterator (arg)
   (cond
     ((NULL arg) nil)
@@ -41,7 +27,7 @@
 )
 
 (defun getValues (E)
- (cdr E) 
+ (cdr E)
 )
 
 (defun matchValueHelper (X N V)
@@ -54,25 +40,26 @@
 )
 
 (defun locate (X N V)
-  (cond 
+  (cond
     ((eq X (car N)) (car V)) ;If X is equal to the first element of N, return the corresponding V
     (t (locate X (cdr N) (cdr V)))
   )
- 
+
 )
 (defun matchValue (X N V)
   (let ((R (matchValueHelper X N V)))
     (if R
-      (locate X N V) 
+      (locate X N V)
        X
     )
   )
 )
 
-(defun buildExpr (B N V expr)
+(defun buildExpr (B N V fn expr)
   ;Performs a search and replace of a body to make it evaluateable
   (cond
-    ((NULL (car B)) nil)
+    ((NULL B) nil)
+    ((eq (car B) fn) (buildExpr B N ))
     ((ATOM (car B)) (append expr (list (matchValue (car B) N V)) (buildExpr (cdr B) N V nil)))
     ((NOT (ATOM (car B))) (append expr (list (buildExpr (car B) N V nil )) (buildExpr (cdr B) N V nil)))
     (t (buildExpr (cdr B) N V (append expr (list (matchValue (car B) N V)))))
@@ -106,8 +93,11 @@
           ((eq f 'not) (not (fl-interp (car arg) P)))
           ; Handle user defined functions
           ((atom f)
-           (let ((N (getNames P)) (V (getValues E)))
-             (fl-interp (buildExpr (getBody P) N V nil) P)
+           (let ((N (getNames P)) (V (getValues E)) (B (getBody P)) (fn (car E)))
+            ;something like ((lambda (vals) ((fl-interp (buildExpr B N vals nil) P))) findvalssomehow)
+                  (fl-interp (buildExpr B N V fn nil) P)
+             )
+             
            )
           )
           (t  E)
